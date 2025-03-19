@@ -1,11 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { IUser, UserMemory } from "../in-memory/user-memory";
 import { FastifyRequest, FastifyReply } from "fastify";
-import { ZodError } from "zod";
 import { FindAllUserService } from "../../src/modules/user/services/find-all-user";
 import { Tipo } from "@prisma/client";
-import { Optional } from "@prisma/client/runtime/library";
 import { AppError } from "../../src/errors/app-error";
+import { Optional } from "../../src/@types/opcional";
 
 let userRepository: UserMemory;
 let findAllUserService: FindAllUserService;
