@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>25/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>25/25</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -100,74 +100,74 @@
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { FastifyReply, FastifyRequest } from "fastify";
 import { UserRepository } from "../repository/user-repository";
-<span class="cstat-no" title="statement not covered" >import { AppError } from "../../../errors/app-error";</span>
-<span class="cstat-no" title="statement not covered" >import { CreateHashPassword } from "../../../utils/hash-password";</span>
-<span class="cstat-no" title="statement not covered" >import { z } from "zod";</span>
+import { AppError } from "../../../errors/app-error";
+import { CreateHashPassword } from "../../../utils/hash-password";
+import { z } from "zod";
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export class CreateUserService {</span>
-<span class="cstat-no" title="statement not covered" >  constructor(private userRepository: UserRepository) {}</span>
+export class CreateUserService {
+  constructor(private userRepository: UserRepository) {}
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  private userBodySchema = z.object({</span>
-<span class="cstat-no" title="statement not covered" >    name: z.string().nonempty("Nome é obrigatório"),</span>
-<span class="cstat-no" title="statement not covered" >    email: z.string().email("E-mail inválido"),</span>
-<span class="cstat-no" title="statement not covered" >    password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),</span>
-<span class="cstat-no" title="statement not covered" >    type: z.enum(["Professor", "Aluno"]),</span>
-<span class="cstat-no" title="statement not covered" >  });</span>
+  private userBodySchema = z.object({
+    name: z.string().nonempty("Nome é obrigatório"),
+    email: z.string().email("E-mail inválido"),
+    password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
+    type: z.enum(["Professor", "Aluno"]),
+  });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  public async execute(req: FastifyRequest, reply: FastifyReply) {</span>
-<span class="cstat-no" title="statement not covered" >    const { name, email, password, type } = this.userBodySchema.parse(req.body);</span>
+  public async execute(req: FastifyRequest, reply: FastifyReply) {
+    const { name, email, password, type } = this.userBodySchema.parse(req.body);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    const checkEmail = await this.userRepository.findByEmail(email);</span>
+    const checkEmail = await this.userRepository.findByEmail(email);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (checkEmail) throw new AppError("E-mail já cadastrado", 400);</span>
+    if (checkEmail) throw new AppError("E-mail já cadastrado", 400);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    const passwordHash = await CreateHashPassword(password);</span>
+    const passwordHash = await CreateHashPassword(password);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    await this.userRepository.create({</span>
-<span class="cstat-no" title="statement not covered" >      nome: name,</span>
-<span class="cstat-no" title="statement not covered" >      email,</span>
-<span class="cstat-no" title="statement not covered" >      senha: passwordHash,</span>
-<span class="cstat-no" title="statement not covered" >      tipo: type,</span>
-<span class="cstat-no" title="statement not covered" >    });</span>
+    await this.userRepository.create({
+      nome: name,
+      email,
+      senha: passwordHash,
+      tipo: type,
+    });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return reply.code(201).send({ message: "Usuário criado com sucesso" });</span>
-<span class="cstat-no" title="statement not covered" >  }</span>
-<span class="cstat-no" title="statement not covered" >}</span>
+    return reply.code(201).send({ message: "Usuário criado com sucesso" });
+  }
+}
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -175,7 +175,7 @@ import { UserRepository } from "../repository/user-repository";
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-13T14:32:16.052Z
+                at 2025-03-19T13:34:14.238Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

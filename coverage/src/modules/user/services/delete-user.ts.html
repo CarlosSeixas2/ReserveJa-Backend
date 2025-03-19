@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -87,54 +87,54 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >import { z } from "zod";</span></span></span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { z } from "zod";
 import { UserRepository } from "../repository/user-repository";
 import { FastifyReply, FastifyRequest } from "fastify";
-<span class="cstat-no" title="statement not covered" >import { AppError } from "../../../errors/app-error";</span>
+import { AppError } from "../../../errors/app-error";
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export class DeleteUserService {</span>
-<span class="cstat-no" title="statement not covered" >  constructor(private userRepository: UserRepository) {}</span>
+export class DeleteUserService {
+  constructor(private userRepository: UserRepository) {}
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  private userParamsSchema = z.object({</span>
-<span class="cstat-no" title="statement not covered" >    id: z.string(),</span>
-<span class="cstat-no" title="statement not covered" >  });</span>
+  private userParamsSchema = z.object({
+    id: z.string(),
+  });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  public async execute(req: FastifyRequest, reply: FastifyReply) {</span>
-<span class="cstat-no" title="statement not covered" >    const { id } = this.userParamsSchema.parse(req.params);</span>
+  public async execute(req: FastifyRequest, reply: FastifyReply) {
+    const { id } = this.userParamsSchema.parse(req.params);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    const user = await this.userRepository.listById(id);</span>
+    const user = await this.userRepository.listById(id);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!user) throw new AppError("Usuário não encontrado", 404);</span>
+    if (!user) throw new AppError("Usuário não encontrado", 404);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    await this.userRepository.delete(id);</span>
+    await this.userRepository.delete(id);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return reply.code(204).send({ message: "Usuário deletado com sucesso" });</span>
-<span class="cstat-no" title="statement not covered" >  }</span>
-<span class="cstat-no" title="statement not covered" >}</span>
+    return reply.code(200).send({ message: "Usuário deletado com sucesso" });
+  }
+}
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -142,7 +142,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-13T14:32:16.052Z
+                at 2025-03-19T13:34:14.238Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

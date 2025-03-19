@@ -19,6 +19,6 @@ export class DeleteUserService {
 
     await this.userRepository.delete(id);
 
-    return reply.code(204).send({ message: "Usuário deletado com sucesso" });
+    return reply.code(200).send({ message: "Usuário deletado com sucesso" });
   }
 }
