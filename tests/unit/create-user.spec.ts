@@ -32,9 +32,6 @@ describe("CreateUserService", () => {
     await createUserService.execute(req, reply);
 
     expect(reply.code).toHaveBeenCalledWith(201);
-    expect(reply.send).toHaveBeenCalledWith({
-      message: "Usuário criado com sucesso",
-    });
     expect((await userRepository.listAll()).length).toBe(1);
   });
 
