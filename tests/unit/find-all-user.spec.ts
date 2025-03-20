@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { IUser, UserMemory } from "../in-memory/user-memory";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { FindAllUserService } from "../../src/modules/user/services/find-all-user";
-import { AppError } from "../../src/errors/app-error";
 import { Optional } from "../../src/@types/opcional";
 
 let userRepository: UserMemory;
@@ -50,7 +49,7 @@ describe("FindAllUserService", () => {
     expect(sendMock.mock.calls[0][0].length).toBe(2);
   });
 
-  it("deve retornar 404 se não houver usuários", async () => {
+  it("deve retornar status 404 se não houver usuários", async () => {
     const req = {} as FastifyRequest;
     const sendMock = vi.fn();
     const reply = {
@@ -58,8 +57,9 @@ describe("FindAllUserService", () => {
       send: sendMock,
     } as unknown as FastifyReply;
 
-    await expect(findAllUserService.execute(req, reply)).rejects.instanceOf(
-      AppError
-    );
+    await findAllUserService.execute(req, reply);
+
+    expect(reply.code).toHaveBeenCalledWith(404);
+    expect(sendMock).toHaveBeenCalled();
   });
 });

@@ -1,7 +1,7 @@
-import { FastifyReply, FastifyRequest } from "fastify";
-import { UserRepository } from "../repository/user-repository";
 import { z } from "zod";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { AppError } from "../../../errors/app-error";
+import { UserRepository } from "../repository/user-repository";
 import { ComparePassword } from "../../../utils/compare-password";
 import { CreateHashPassword } from "../../../utils/hash-password";
 
@@ -19,11 +19,15 @@ export class UpdateUserService {
       .string()
       .min(6, "A senha deve ter pelo menos 6 caracteres")
       .optional(),
+    type: z.enum(["Professor", "Aluno"]).optional(),
   });
 
   public async execute(req: FastifyRequest, reply: FastifyReply) {
     const { id } = this.userParamsSchema.parse(req.params);
-    const { name, email, password } = this.userBodySchema.parse(req.body);
+    const { name, email, password, type } = this.userBodySchema.parse(req.body);
+
+    if (!name && !email && !password && !type)
+      throw new AppError("Nenhum dado foi informado para atualização", 400);
 
     const user = await this.userRepository.listById(id);
 
@@ -41,9 +45,10 @@ export class UpdateUserService {
     }
 
     await this.userRepository.update(id, {
-      nome: name,
-      email,
+      nome: name ?? user.nome,
+      email: email ?? user.email,
       senha: hashedPassword,
+      tipo: type ?? user.tipo,
     });
 
     return reply.code(200).send({ message: "Usuário atualizado com sucesso" });

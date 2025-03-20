@@ -3,6 +3,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { AppError } from "../../src/errors/app-error";
 import { UserMemory } from "../in-memory/user-memory";
 import { CreateUserService } from "../../src/modules/user/services/create-user";
+import { ZodError } from "zod";
 
 let userRepository: UserMemory;
 let createUserService: CreateUserService;
@@ -61,18 +62,42 @@ describe("CreateUserService", () => {
     );
   });
 
-  it("deve lançar erro se os dados forem inválidos", async () => {
+  it("deve lançar erro se os dados forem vazios", async () => {
+    const req = {} as FastifyRequest;
+
+    const reply = {} as FastifyReply;
+
+    await expect(createUserService.execute(req, reply)).rejects.toThrow();
+  });
+
+  it("deve lançar erro se o email for inválido", async () => {
     const req = {
       body: {
-        name: "",
-        email: "email_invalido",
-        password: "123",
-        type: "Aluno",
+        name: "Carlos",
+        email: "dawddwaw",
+        password: "1234567",
+        type: "Professor",
       },
     } as FastifyRequest;
 
     const reply = {} as FastifyReply;
 
     await expect(createUserService.execute(req, reply)).rejects.toThrow();
+  });
+
+  it("deve lançar erro se não passar o Tipo correto", async () => {
+    const req = {
+      body: {
+        name: "Outro Nome",
+        email: "carlos@example.com",
+        password: "123456",
+        type: "Teste",
+      },
+    } as FastifyRequest;
+    const reply = {} as FastifyReply;
+
+    await expect(createUserService.execute(req, reply)).rejects.toThrow(
+      ZodError
+    );
   });
 });
