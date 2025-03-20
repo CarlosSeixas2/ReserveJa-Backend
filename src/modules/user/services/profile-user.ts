@@ -1,5 +1,5 @@
-import { UserRepository } from "../repository/user-repository";
 import { FastifyReply, FastifyRequest } from "fastify";
+import { UserRepository } from "../repository/user-repository";
 import { AppError } from "../../../errors/app-error";
 
 export class ProfileUserService {
@@ -8,7 +8,7 @@ export class ProfileUserService {
   public async execute(req: FastifyRequest, reply: FastifyReply) {
     if (!req.user) throw new AppError("Usuário não autenticado", 401);
 
-    const { id } = req.user;
+    const { id } = req.user as { id: string };
 
     const user = await this.userRepository.listById(id);
 

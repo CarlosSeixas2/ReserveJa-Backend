@@ -5,6 +5,7 @@ import { UserRepository } from "../repository/user-repository";
 import { AppError } from "../../../errors/app-error";
 import { CreateHashPassword } from "../../../utils/hash-password";
 import { env } from "../../../env/zod";
+import { GenerateToken } from "../../../utils/generate-token";
 
 export class CreateUserService {
   constructor(private userRepository: UserRepository) {}
@@ -32,13 +33,7 @@ export class CreateUserService {
       tipo: type,
     });
 
-    const token = jwt.sign(
-      {
-        id: user.id,
-      },
-      env.SECRET_WORD,
-      { expiresIn: "1d" }
-    );
+    const token = await GenerateToken({ id: user.id });
 
     return reply
       .code(201)

@@ -1,10 +1,9 @@
 import { z } from "zod";
-import jwt from "jsonwebtoken";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { UserRepository } from "../repository/user-repository";
 import { AppError } from "../../../errors/app-error";
 import { ComparePassword } from "../../../utils/compare-password";
-import { env } from "../../../env/zod";
+import { GenerateToken } from "../../../utils/generate-token";
 
 export class LoginUserService {
   constructor(private userRepository: UserRepository) {}
@@ -25,13 +24,7 @@ export class LoginUserService {
 
     if (!isPasswordCorrect) throw new AppError("Senha incorreta", 401);
 
-    const token = jwt.sign(
-      {
-        id: user.id,
-      },
-      env.SECRET_WORD,
-      { expiresIn: "1d" }
-    );
+    const token = await GenerateToken({ id: user.id });
 
     const { senha, ...userWithoutPassword } = user;
 
