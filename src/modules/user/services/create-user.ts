@@ -1,8 +1,10 @@
+import { z } from "zod";
+import jwt from "jsonwebtoken";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { UserRepository } from "../repository/user-repository";
 import { AppError } from "../../../errors/app-error";
 import { CreateHashPassword } from "../../../utils/hash-password";
-import { z } from "zod";
+import { env } from "../../../env/zod";
 
 export class CreateUserService {
   constructor(private userRepository: UserRepository) {}
@@ -23,13 +25,23 @@ export class CreateUserService {
 
     const passwordHash = await CreateHashPassword(password);
 
-    await this.userRepository.create({
+    const user = await this.userRepository.create({
       nome: name,
       email,
       senha: passwordHash,
       tipo: type,
     });
 
-    return reply.code(201).send({ message: "Usuário criado com sucesso" });
+    const token = jwt.sign(
+      {
+        id: user.id,
+      },
+      env.SECRET_WORD,
+      { expiresIn: "1d" }
+    );
+
+    return reply
+      .code(201)
+      .send({ message: "Usuário criado com sucesso", token });
   }
 }

@@ -4,6 +4,8 @@ import { makeUpdateUserService } from "../factory/make-update-user-service";
 import { makeDeleteUserService } from "../factory/make-delete-user-service";
 import { makeFindAllUserService } from "../factory/make-find-all-user-service";
 import { makeFindByIdUserService } from "../factory/make-find-by-id-user-service";
+import { makeLoginUserService } from "../factory/make-login-user-service";
+import { makeProfileUserService } from "../factory/make-profile-user-service";
 
 export class UserController {
   async create(req: FastifyRequest, reply: FastifyReply) {
@@ -29,5 +31,15 @@ export class UserController {
   async get(req: FastifyRequest, reply: FastifyReply) {
     const createFindByIdService = makeFindByIdUserService();
     await createFindByIdService.execute(req, reply);
+  }
+
+  async me(req: FastifyRequest, reply: FastifyReply) {
+    const createProfileService = makeProfileUserService();
+    await createProfileService.execute(req, reply);
+  }
+
+  async login(req: FastifyRequest, reply: FastifyReply) {
+    const createLoginService = makeLoginUserService();
+    await createLoginService.execute(req, reply);
   }
 }
