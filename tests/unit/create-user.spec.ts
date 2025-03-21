@@ -64,7 +64,9 @@ describe("CreateUserService", () => {
 
     const reply = {} as FastifyReply;
 
-    await expect(createUserService.execute(req, reply)).rejects.toThrow();
+    await expect(createUserService.execute(req, reply)).rejects.toThrow(
+      ZodError
+    );
   });
 
   it("deve lançar erro se o email for inválido", async () => {
@@ -79,13 +81,15 @@ describe("CreateUserService", () => {
 
     const reply = {} as FastifyReply;
 
-    await expect(createUserService.execute(req, reply)).rejects.toThrow();
+    await expect(createUserService.execute(req, reply)).rejects.toThrow(
+      ZodError
+    );
   });
 
   it("deve lançar erro se não passar o Tipo correto", async () => {
     const req = {
       body: {
-        name: "Outro Nome",
+        name: "Carlos",
         email: "carlos@example.com",
         password: "123456",
         type: "Teste",

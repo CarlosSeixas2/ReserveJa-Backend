@@ -24,7 +24,10 @@ export class RoomClassRepository {
     });
   }
 
-  public async update(id: string, data: Prisma.SalaUpdateInput) {
+  public async update(
+    id: string,
+    data: Prisma.SalaUpdateInput
+  ): Promise<Sala | null> {
     return await prisma.sala.update({
       where: {
         id,
@@ -33,7 +36,7 @@ export class RoomClassRepository {
     });
   }
 
-  public async delete(id: string) {
+  public async delete(id: string): Promise<Sala | null> {
     return await prisma.sala.delete({
       where: {
         id,
