@@ -13,7 +13,7 @@ export class ClassRoomMemory {
   }
 
   public async listById(id: string): Promise<IClassRoom | null> {
-    return this.classRooms.find((classRoom) => classRoom.nome === id) ?? null;
+    return this.classRooms.find((classRoom) => classRoom.id === id) ?? null;
   }
 
   public async create(data: Omit<IClassRoom, "id">): Promise<IClassRoom> {

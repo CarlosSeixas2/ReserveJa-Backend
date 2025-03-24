@@ -7,7 +7,8 @@ export class FindAllRoomService {
   public async execute(req: FastifyRequest, reply: FastifyReply) {
     const rooms = await this.roomRepository.listAll();
 
-    if (!rooms) return reply.code(404).send("Nenhuma sala encontrada");
+    if (rooms?.length === 0)
+      return reply.code(404).send("Nenhuma sala encontrada");
 
     return reply.code(200).send(rooms);
   }

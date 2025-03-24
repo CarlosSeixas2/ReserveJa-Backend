@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { RoomClassRepository } from "../repository/room-class-repository";
 import { z } from "zod";
+import { AppError } from "../../../errors/app-error";
 
 export class UpdateRoomService {
   constructor(private roomRepository: RoomClassRepository) {}
@@ -19,10 +20,14 @@ export class UpdateRoomService {
     const { id } = this.roomParamsSchema.parse(req.params);
     const { name, capacity, diponility } = this.roomBodySchema.parse(req.body);
 
+    const room = await this.roomRepository.listById(id);
+
+    if (!room) throw new AppError("Sala não encontrada");
+
     await this.roomRepository.update(id, {
-      nome: name,
-      capacidade: capacity,
-      disponivel: diponility,
+      nome: name ?? room.nome,
+      capacidade: capacity ?? room.capacidade,
+      disponivel: diponility ?? room.disponivel,
     });
 
     return reply.code(200).send("Sala atualizada com sucesso");

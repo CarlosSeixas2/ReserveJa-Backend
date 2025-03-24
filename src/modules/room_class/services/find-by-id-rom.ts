@@ -13,10 +13,10 @@ export class FindByIdRoomService {
   public async execute(req: FastifyRequest, reply: FastifyReply) {
     const { id } = this.roomParamsSchema.parse(req.params);
 
-    const user = this.roomClassRepository.listById(id);
+    const user = await this.roomClassRepository.listById(id);
 
     if (!user) throw new AppError("Room not found", 404);
 
-    return reply.status(200).send(user);
+    return reply.code(200).send(user);
   }
 }
