@@ -25,28 +25,42 @@ enum Status {
 }
 
 model Usuario {
-  id      String    @id @default(cuid())
-  nome    String
-  email   String    @unique
-  senha   String
-  tipo    Tipo
-  Reserva Reserva[]
+  id          String        @id @default(cuid())
+  nome        String
+  email       String        @unique
+  senha       String
+  tipo        Tipo
+  Reserva     Reserva[]
+  Solicitacao Solicitacao[]
 }
 
 model Sala {
-  id         String    @id @default(cuid())
-  nome       String
-  capacidade Int
-  disponivel Boolean
-  Reserva    Reserva[]
+  id          String        @id @default(cuid())
+  nome        String
+  capacidade  Int
+  disponivel  Boolean
+  Reserva     Reserva[]
+  Solicitacao Solicitacao[]
 }
 
 model Reserva {
-  id        String   @id @default(cuid())
+  id        String  @id @default(cuid())
   usuarioId String
   salaId    String
-  data_hora DateTime
+  horario   String
   status    Status
-  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
-  sala      Sala     @relation(fields: [salaId], references: [id])
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+  sala      Sala    @relation(fields: [salaId], references: [id])
+}
+
+model Solicitacao {
+  id          String  @id @default(cuid())
+  usuarioId   String
+  salaId      String
+  horario     String
+  status      Status
+  motivo      String
+  aprovadorId String?
+  usuario     Usuario @relation(fields: [usuarioId], references: [id])
+  sala        Sala    @relation(fields: [salaId], references: [id])
 }

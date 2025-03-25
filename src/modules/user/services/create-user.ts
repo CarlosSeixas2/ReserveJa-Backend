@@ -1,10 +1,8 @@
 import { z } from "zod";
-import jwt from "jsonwebtoken";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { UserRepository } from "../repository/user-repository";
 import { AppError } from "../../../errors/app-error";
 import { CreateHashPassword } from "../../../utils/hash-password";
-import { env } from "../../../env/zod";
 import { GenerateToken } from "../../../utils/generate-token";
 
 export class CreateUserService {

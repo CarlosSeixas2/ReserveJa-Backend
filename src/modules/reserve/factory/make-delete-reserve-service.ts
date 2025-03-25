@@ -1,5 +1,5 @@
 import { ReserveRepository } from "../repository/reserve-repository";
-import { DeleteReserveService } from "../services/delete-rom";
+import { DeleteReserveService } from "../services/delete-reserve";
 
 export function makeDeleteReserveService() {
   const reserveRepository = new ReserveRepository();

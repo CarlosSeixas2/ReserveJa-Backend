@@ -1,25 +1,37 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { z } from "zod";
 import { ReserveRepository } from "../repository/reserve-repository";
+import { z } from "zod";
 import { UserRepository } from "../../user/repository/user-repository";
 import { RoomClassRepository } from "../../room_class/repository/room-class-repository";
 import { AppError } from "../../../errors/app-error";
 
-export class CreateReserveService {
+export class UpdateReserveService {
   constructor(
     private reserveRepository: ReserveRepository,
     private userRepository: UserRepository,
     private roomRepository: RoomClassRepository
   ) {}
 
+  private reserveParamsSchema = z.object({
+    id: z.string(),
+  });
+
   private reserveBodySchema = z.object({
     userId: z.string().nonempty(),
     roomId: z.string().nonempty(),
-    time: z.string().nonempty(),
+    status: z.enum(["Pendente", "Aprovada", "Recusada"]).optional(),
+    time: z.string().optional(),
   });
 
   public async execute(req: FastifyRequest, reply: FastifyReply) {
-    const { userId, roomId, time } = this.reserveBodySchema.parse(req.body);
+    const { id } = this.reserveParamsSchema.parse(req.params);
+    const { userId, roomId, status, time } = this.reserveBodySchema.parse(
+      req.body
+    );
+
+    const reserve = await this.reserveRepository.listById(id);
+
+    if (!reserve) throw new AppError("Reserva não encontrada", 404);
 
     const checkUser = await this.userRepository.listById(userId);
 
@@ -28,26 +40,13 @@ export class CreateReserveService {
     if (!checkUser || !checkRoom)
       throw new AppError("Usuário ou Sala não encontrado(a)", 404);
 
-    if (checkUser.tipo !== "Professor") {
-      throw new AppError("Apenas professores podem reservar salas", 403);
-    }
-
-    const findRoomReserves = await this.reserveRepository.listRoomReserves(
-      roomId,
-      time
-    );
-
-    if (findRoomReserves.length > 0) {
-      throw new AppError("Sala já reservada", 400);
-    }
-
-    await this.reserveRepository.create({
+    await this.reserveRepository.update(id, {
       salaId: roomId,
       usuarioId: userId,
-      horario: time,
-      status: "Aprovada",
+      status: status ?? reserve.status,
+      horario: time ?? reserve.horario,
     });
 
-    return reply.code(201).send("Reserva criada com sucesso");
+    return reply.code(200).send("Reserva atualizada com sucesso");
   }
 }

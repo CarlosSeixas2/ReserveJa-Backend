@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { ZodError } from "zod";
-import { CreateRoomService } from "../../src/modules/room_class/services/create-rom";
-import { ClassRoomMemory } from "../in-memory/class-room-memory";
+import { ClassRoomMemory } from "../class-room-memory";
+import { CreateRoomService } from "../../../src/modules/room_class/services/create-rom";
 
 let roomclassRepository: ClassRoomMemory;
 let createRoomService: CreateRoomService;
