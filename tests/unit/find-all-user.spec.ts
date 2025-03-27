@@ -3,6 +3,7 @@ import { IUser, UserMemory } from "../in-memory/user-memory";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { FindAllUserService } from "../../src/modules/user/services/find-all-user";
 import { Optional } from "../../src/@types/opcional";
+import { AppError } from "../../src/errors/app-error";
 
 let userRepository: UserMemory;
 let findAllUserService: FindAllUserService;
@@ -57,9 +58,8 @@ describe("FindAllUserService", () => {
       send: sendMock,
     } as unknown as FastifyReply;
 
-    await findAllUserService.execute(req, reply);
-
-    expect(reply.code).toHaveBeenCalledWith(404);
-    expect(sendMock).toHaveBeenCalled();
+    await expect(findAllUserService.execute(req, reply)).rejects.instanceOf(
+      AppError
+    );
   });
 });

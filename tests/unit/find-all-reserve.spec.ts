@@ -4,6 +4,7 @@ import { ReserveMemory } from "../in-memory/reserve-memory";
 import { UserMemory } from "../in-memory/user-memory";
 import { ClassRoomMemory } from "../in-memory/class-room-memory";
 import { FindAllReserveService } from "../../src/modules/reserve/services/find-all-reserve";
+import { AppError } from "../../src/errors/app-error";
 
 let reserveRepository: ReserveMemory;
 let userRepository: UserMemory;
@@ -61,9 +62,8 @@ describe("FindAllUserService", () => {
       send: sendMock,
     } as unknown as FastifyReply;
 
-    await findAllReserveService.execute(req, reply);
-
-    expect(reply.code).toHaveBeenCalledWith(404);
-    expect(sendMock).toHaveBeenCalled();
+    await expect(findAllReserveService.execute(req, reply)).rejects.instanceOf(
+      AppError
+    );
   });
 });

@@ -20,6 +20,6 @@ export class CreateRoomService {
       disponivel: diponility,
     });
 
-    return reply.code(201).send("Sala criada com sucesso");
+    return reply.code(201).send({ message: "Sala criada com sucesso" });
   }
 }

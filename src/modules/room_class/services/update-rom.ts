@@ -30,6 +30,6 @@ export class UpdateRoomService {
       disponivel: diponility ?? room.disponivel,
     });
 
-    return reply.code(200).send("Sala atualizada com sucesso");
+    return reply.code(200).send({ message: "Sala atualizada com sucesso" });
   }
 }

@@ -15,7 +15,7 @@ export class FindByIdRoomService {
 
     const user = await this.roomClassRepository.listById(id);
 
-    if (!user) throw new AppError("Room not found", 404);
+    if (!user) throw new AppError("Sala não encontrada", 404);
 
     return reply.code(200).send(user);
   }

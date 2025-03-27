@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { SolicitationRepository } from "../repository/solicitation-repository";
 import { z } from "zod";
+import { AppError } from "../../../errors/app-error";
 
 export class FindByIdSolicitationService {
   constructor(private solicitationRepository: SolicitationRepository) {}
@@ -14,9 +15,7 @@ export class FindByIdSolicitationService {
 
     const solicitations = await this.solicitationRepository.findById(id);
 
-    if (!solicitations) {
-      return reply.code(404).send("Nenhuma solicitação encontrada");
-    }
+    if (!solicitations) throw new AppError("Solicitação não encontrada", 404);
 
     return reply.code(200).send(solicitations);
   }

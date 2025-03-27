@@ -48,6 +48,6 @@ export class CreateReserveService {
       status: "Aprovada",
     });
 
-    return reply.code(201).send("Reserva criada com sucesso");
+    return reply.code(201).send({ message: "Reserva criada com sucesso" });
   }
 }

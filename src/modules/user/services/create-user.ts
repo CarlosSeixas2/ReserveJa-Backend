@@ -33,8 +33,6 @@ export class CreateUserService {
 
     const token = await GenerateToken({ id: user.id });
 
-    return reply
-      .code(201)
-      .send({ message: "Usuário criado com sucesso", token });
+    return reply.code(201).send({ token });
   }
 }

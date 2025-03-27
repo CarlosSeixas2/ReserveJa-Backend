@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { SolicitationRepository } from "../repository/solicitation-repository";
+import { AppError } from "../../../errors/app-error";
 
 export class UpdateSolicitationService {
   constructor(private solicitationRepository: SolicitationRepository) {}
@@ -26,9 +27,7 @@ export class UpdateSolicitationService {
 
     const solicitations = await this.solicitationRepository.findById(id);
 
-    if (!solicitations) {
-      return reply.code(404).send("Nenhuma solicitação encontrada");
-    }
+    if (!solicitations) throw new AppError("Solicitação não encontrada", 404);
 
     await this.solicitationRepository.update(id, {
       usuarioId: userId ?? solicitations.usuarioId,
@@ -39,6 +38,8 @@ export class UpdateSolicitationService {
       aprovadorId: approverId ?? solicitations.aprovadorId,
     });
 
-    return reply.code(200).send("Solicitação atualizada com sucesso");
+    return reply
+      .code(200)
+      .send({ message: "Solicitação atualizada com sucesso" });
   }
 }

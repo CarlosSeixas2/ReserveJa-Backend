@@ -47,6 +47,6 @@ export class UpdateReserveService {
       horario: time ?? reserve.horario,
     });
 
-    return reply.code(200).send("Reserva atualizada com sucesso");
+    return reply.code(200).send({ message: "Reserva atualizada com sucesso" });
   }
 }

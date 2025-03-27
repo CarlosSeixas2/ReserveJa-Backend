@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { ReserveRepository } from "../repository/reserve-repository";
+import { AppError } from "../../../errors/app-error";
 
 export class FindAllReserveService {
   constructor(private reserveRepository: ReserveRepository) {}
@@ -8,7 +9,7 @@ export class FindAllReserveService {
     const reserves = await this.reserveRepository.listAll();
 
     if (!reserves || reserves.length == 0)
-      return reply.code(404).send("Nenhuma reserva encontrada");
+      throw new AppError("Nenhuma reserva encontrada", 404);
 
     return reply.code(200).send(reserves);
   }

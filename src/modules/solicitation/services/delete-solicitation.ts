@@ -19,6 +19,8 @@ export class DeleteSolicitationService {
 
     await this.solicitationRepository.delete(id);
 
-    return reply.code(201).send("Solicitação deletada com sucesso");
+    return reply
+      .code(201)
+      .send({ message: "Solicitação deletada com sucesso" });
   }
 }

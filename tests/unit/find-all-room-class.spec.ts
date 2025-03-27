@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { ClassRoomMemory } from "../in-memory/class-room-memory";
 import { FindAllRoomService } from "../../src/modules/room_class/services/find-all-room";
+import { AppError } from "../../src/errors/app-error";
 
 let roomclassRepository: ClassRoomMemory;
 let listAllRoomService: FindAllRoomService;
@@ -41,7 +42,7 @@ describe("ListAll Room Service", () => {
     expect((await roomclassRepository.listAll()).length).toBe(2);
   });
 
-  it("deve retornar status 404 ao listar as salas", async () => {
+  it("deve retornar erro ao listar as salas", async () => {
     const req = {} as FastifyRequest;
 
     const reply = {
@@ -49,8 +50,8 @@ describe("ListAll Room Service", () => {
       send: vi.fn(),
     } as unknown as FastifyReply;
 
-    await listAllRoomService.execute(req, reply);
-
-    expect(reply.code).toHaveBeenCalledWith(404);
+    await expect(listAllRoomService.execute(req, reply)).rejects.instanceOf(
+      AppError
+    );
   });
 });

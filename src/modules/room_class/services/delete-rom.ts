@@ -19,6 +19,6 @@ export class DeleteRoomService {
 
     await this.roomRepository.delete(id);
 
-    return reply.code(200).send("Sala deletada com sucesso");
+    return reply.code(200).send({ message: "Sala deletada com sucesso" });
   }
 }

@@ -19,6 +19,6 @@ export class DeleteReserveService {
 
     await this.reserveRepository.delete(id);
 
-    return reply.code(200).send("Reserva deletada com sucesso");
+    return reply.code(200).send({ message: "Reserva deletada com sucesso" });
   }
 }
