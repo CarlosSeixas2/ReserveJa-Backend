@@ -10,6 +10,6 @@ export async function userRoutes(fastify: FastifyInstance) {
   fastify.delete("/:id", { preHandler: authMiddleware }, userController.delete);
   fastify.get("/", userController.list);
   fastify.get("/:id", { preHandler: authMiddleware }, userController.get);
-  fastify.get("/me", { preHandler: authMiddleware }, userController.me);
+  fastify.get("/profile", { preHandler: authMiddleware }, userController.me);
   fastify.post("/login", userController.login);
 }

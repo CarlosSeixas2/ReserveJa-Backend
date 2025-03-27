@@ -26,7 +26,7 @@ export class LoginUserService {
 
     const token = await GenerateToken({ id: user.id });
 
-    const { senha, ...userWithoutPassword } = user;
+    // const { senha, ...userWithoutPassword } = user;
 
     return reply.code(200).send({ token });
   }
