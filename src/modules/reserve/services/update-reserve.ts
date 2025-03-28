@@ -2,14 +2,12 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { ReserveRepository } from "../repository/reserve-repository";
 import { z } from "zod";
 import { UserRepository } from "../../user/repository/user-repository";
-import { RoomClassRepository } from "../../room_class/repository/room-class-repository";
 import { AppError } from "../../../errors/app-error";
 
 export class UpdateReserveService {
   constructor(
     private reserveRepository: ReserveRepository,
-    private userRepository: UserRepository,
-    private roomRepository: RoomClassRepository
+    private userRepository: UserRepository
   ) {}
 
   private reserveParamsSchema = z.object({
@@ -17,9 +15,9 @@ export class UpdateReserveService {
   });
 
   private reserveBodySchema = z.object({
-    roomId: z.string().nonempty(),
     status: z.enum(["Pendente", "Aprovada", "Recusada"]).optional(),
     time: z.string().optional(),
+    date: z.string().optional(),
   });
 
   public async execute(req: FastifyRequest, reply: FastifyReply) {
@@ -27,7 +25,14 @@ export class UpdateReserveService {
 
     const { id } = this.reserveParamsSchema.parse(req.params);
 
-    const { roomId, status, time } = this.reserveBodySchema.parse(req.body);
+    const { status, time, date } = this.reserveBodySchema.parse(req.body);
+
+    let parsedDate: Date | undefined;
+
+    if (date) {
+      parsedDate = new Date(date);
+      if (isNaN(parsedDate.getTime())) throw new AppError("Data inválida", 400);
+    }
 
     const reserve = await this.reserveRepository.listById(id);
 
@@ -35,16 +40,12 @@ export class UpdateReserveService {
 
     const checkUser = await this.userRepository.listById(user.id);
 
-    const checkRoom = await this.roomRepository.listById(roomId);
-
-    if (!checkUser || !checkRoom)
-      throw new AppError("Usuário ou Sala não encontrado(a)", 404);
+    if (!checkUser) throw new AppError("Usuário não encontrado", 404);
 
     await this.reserveRepository.update(id, {
-      salaId: roomId,
-      usuarioId: user.id,
       status: status ?? reserve.status,
       horario: time ?? reserve.horario,
+      data: parsedDate ?? reserve.data,
     });
 
     return reply.code(200).send({ message: "Reserva atualizada com sucesso" });

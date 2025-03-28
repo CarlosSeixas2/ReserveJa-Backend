@@ -15,12 +15,17 @@ export class CreateReserveService {
   private reserveBodySchema = z.object({
     roomId: z.string().nonempty(),
     time: z.string().nonempty(),
+    date: z.string().nonempty(),
   });
 
   public async execute(req: FastifyRequest, reply: FastifyReply) {
     const user = (await req.user) as { id: string; tipo: string };
 
-    const { roomId, time } = this.reserveBodySchema.parse(req.body);
+    const { roomId, time, date } = this.reserveBodySchema.parse(req.body);
+
+    const parsedDate = new Date(date);
+
+    if (isNaN(parsedDate.getTime())) throw new AppError("Data inválida", 400);
 
     const checkUser = await this.userRepository.listById(user.id);
 
@@ -32,12 +37,10 @@ export class CreateReserveService {
     if (checkUser.tipo !== "Professor")
       throw new AppError("Apenas professores podem reservar salas", 403);
 
-    let date = new Date();
-
     const findRoomReserves = await this.reserveRepository.listRoomReserves(
       roomId,
       time,
-      date
+      parsedDate
     );
 
     if (findRoomReserves.length > 0)

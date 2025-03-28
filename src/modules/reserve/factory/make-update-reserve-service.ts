@@ -6,11 +6,6 @@ import { UpdateReserveService } from "../services/update-reserve";
 export function makeUpdateReserveService() {
   const reserveRepository = new ReserveRepository();
   const userRepository = new UserRepository();
-  const roomRepository = new RoomClassRepository();
 
-  return new UpdateReserveService(
-    reserveRepository,
-    userRepository,
-    roomRepository
-  );
+  return new UpdateReserveService(reserveRepository, userRepository);
 }

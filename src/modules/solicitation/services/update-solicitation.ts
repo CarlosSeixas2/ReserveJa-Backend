@@ -1,7 +1,7 @@
 import { z } from "zod";
+import { AppError } from "../../../errors/app-error";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { SolicitationRepository } from "../repository/solicitation-repository";
-import { AppError } from "../../../errors/app-error";
 
 export class UpdateSolicitationService {
   constructor(private solicitationRepository: SolicitationRepository) {}
@@ -11,32 +11,36 @@ export class UpdateSolicitationService {
   });
 
   private solicitationBodySchema = z.object({
-    roomId: z.string().optional(),
     time: z.string().optional(),
     status: z.enum(["Pendente", "Aprovada", "Recusada"]).optional(),
     reason: z.string().optional(),
     approverId: z.string().optional(),
+    date: z.string().optional(),
   });
 
   async execute(req: FastifyRequest, reply: FastifyReply) {
-    const user = req.user as { id: string; tipo: string };
-
     const { id } = this.solicitationParamsSchema.parse(req.params);
 
-    const { roomId, time, status, reason, approverId } =
+    const { time, status, reason, approverId, date } =
       this.solicitationBodySchema.parse(req.body);
+
+    let parsedDate: Date | undefined;
+
+    if (date) {
+      parsedDate = new Date(date);
+      if (isNaN(parsedDate.getTime())) throw new AppError("Data inválida", 400);
+    }
 
     const solicitations = await this.solicitationRepository.findById(id);
 
     if (!solicitations) throw new AppError("Solicitação não encontrada", 404);
 
     await this.solicitationRepository.update(id, {
-      usuarioId: user.id ?? solicitations.usuarioId,
-      salaId: roomId ?? solicitations.salaId,
       horario: time ?? solicitations.horario,
       status: status ?? solicitations.status,
       motivo: reason ?? solicitations.motivo,
       aprovadorId: approverId ?? solicitations.aprovadorId,
+      data: parsedDate ?? solicitations.data,
     });
 
     return reply

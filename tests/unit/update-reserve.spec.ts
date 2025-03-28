@@ -3,7 +3,6 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { ReserveMemory } from "../in-memory/reserve-memory";
 import { UserMemory } from "../in-memory/user-memory";
 import { ClassRoomMemory } from "../in-memory/class-room-memory";
-import { FindByIdReserveService } from "../../src/modules/reserve/services/find-by-id-reserve";
 import { UpdateReserveService } from "../../src/modules/reserve/services/update-reserve";
 import { AppError } from "../../src/errors/app-error";
 
@@ -19,8 +18,7 @@ describe("FindAllReserveService", () => {
     roomRepository = new ClassRoomMemory();
     updateReserveService = new UpdateReserveService(
       reserveRepository,
-      userRepository,
-      roomRepository
+      userRepository
     );
   });
 
