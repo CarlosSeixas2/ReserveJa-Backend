@@ -11,11 +11,15 @@ export class DeleteRoomService {
   });
 
   public async execute(req: FastifyRequest, reply: FastifyReply) {
+    const user = (await req.user) as { id: string; tipo: string };
+
     const { id } = this.roomParamsSchema.parse(req.params);
 
-    const user = await this.roomRepository.listById(id);
+    if (user?.tipo === "Aluno") throw new AppError("Usuário não autorizado");
 
-    if (!user) throw new AppError("Sala não encontrada");
+    const room = await this.roomRepository.listById(id);
+
+    if (!room) throw new AppError("Sala não encontrada");
 
     await this.roomRepository.delete(id);
 

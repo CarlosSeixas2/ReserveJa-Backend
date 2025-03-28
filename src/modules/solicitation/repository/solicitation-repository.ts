@@ -51,4 +51,26 @@ export class SolicitationRepository {
 
     return solicitation;
   }
+
+  // public async listSolicitationsReserves(
+  //   roomId: string,
+  //   time: string,
+  //   date: Date
+  // ) {
+  //   const startOfDay = new Date(date.setHours(0, 0, 0, 0));
+  //   const endOfDay = new Date(date.setHours(23, 59, 59, 999));
+
+  //   const solicitation = await prisma.solicitacao.findMany({
+  //     where: {
+  //       salaId: roomId,
+  //       horario: time,
+  //       data: {
+  //         gte: startOfDay, // Maior ou igual ao início do dia
+  //         lte: endOfDay, // Menor ou igual ao final do dia
+  //       },
+  //     },
+  //   });
+
+  //   return solicitation;
+  // }
 }

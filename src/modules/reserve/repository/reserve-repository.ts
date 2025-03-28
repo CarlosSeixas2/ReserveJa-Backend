@@ -20,13 +20,21 @@ export class ReserveRepository {
 
   public async listRoomReserves(
     roomId: string,
-    time: string
+    time: string,
+    date: Date
   ): Promise<Reserva[]> {
+    const startOfDay = new Date(date.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(date.setHours(23, 59, 59, 999));
+
     const reserves = await prisma.reserva.findMany({
       where: {
         salaId: roomId,
         status: "Aprovada",
         horario: time,
+        data: {
+          gte: startOfDay, // Maior ou igual ao início do dia
+          lte: endOfDay, // Menor ou igual ao final do dia
+        },
       },
     });
 

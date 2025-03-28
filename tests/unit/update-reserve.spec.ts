@@ -43,6 +43,7 @@ describe("FindAllReserveService", () => {
       salaId: room.id,
       horario: "08:00",
       status: "Aprovada",
+      data: new Date(),
     });
 
     const req = {
@@ -50,10 +51,13 @@ describe("FindAllReserveService", () => {
         id: reserve.id,
       },
       body: {
-        userId: user.id,
         roomId: room.id,
         status: "Recusada",
         time: "09:00",
+      },
+      user: {
+        id: user.id,
+        tipo: user.tipo,
       },
     } as FastifyRequest;
 
@@ -74,10 +78,12 @@ describe("FindAllReserveService", () => {
         id: "123",
       },
       body: {
-        userId: "123",
         roomId: "123",
         status: "Recusada",
         time: "09:00",
+      },
+      user: {
+        id: "123",
       },
     } as FastifyRequest;
 

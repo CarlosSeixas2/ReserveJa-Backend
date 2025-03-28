@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, vi, test } from "vitest";
 import { FastifyRequest, FastifyReply } from "fastify";
-import { ZodError } from "zod";
 import { DeleteReserveService } from "../../src/modules/reserve/services/delete-reserve";
 import { ReserveMemory } from "../in-memory/reserve-memory";
 import { UserMemory } from "../in-memory/user-memory";

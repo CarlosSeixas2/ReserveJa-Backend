@@ -19,7 +19,6 @@ export class CreateUserService {
     const { name, email, password, type } = this.userBodySchema.parse(req.body);
 
     const checkEmail = await this.userRepository.findByEmail(email);
-
     if (checkEmail) throw new AppError("E-mail já cadastrado", 400);
 
     const passwordHash = await CreateHashPassword(password);
@@ -31,8 +30,10 @@ export class CreateUserService {
       tipo: type,
     });
 
-    const token = await GenerateToken({ id: user.id });
+    const token = await GenerateToken({ id: user.id, tipo: user.tipo });
 
-    return reply.code(201).send({ token });
+    // const { senha, ...userWithoutPassword } = user;
+
+    return reply.code(201).send({ message: "Registrado com sucesso", token });
   }
 }

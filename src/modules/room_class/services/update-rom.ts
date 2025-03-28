@@ -13,12 +13,15 @@ export class UpdateRoomService {
   private roomBodySchema = z.object({
     name: z.string().optional(),
     capacity: z.number().optional(),
-    diponility: z.boolean().optional(),
   });
 
   public async execute(req: FastifyRequest, reply: FastifyReply) {
+    const user = (await req.user) as { id: string; tipo: string };
+
     const { id } = this.roomParamsSchema.parse(req.params);
-    const { name, capacity, diponility } = this.roomBodySchema.parse(req.body);
+    const { name, capacity } = this.roomBodySchema.parse(req.body);
+
+    if (user?.tipo === "Aluno") throw new AppError("Usuário não autorizado");
 
     const room = await this.roomRepository.listById(id);
 
@@ -27,7 +30,6 @@ export class UpdateRoomService {
     await this.roomRepository.update(id, {
       nome: name ?? room.nome,
       capacidade: capacity ?? room.capacidade,
-      disponivel: diponility ?? room.disponivel,
     });
 
     return reply.code(200).send({ message: "Sala atualizada com sucesso" });

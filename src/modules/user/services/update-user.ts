@@ -24,6 +24,7 @@ export class UpdateUserService {
 
   public async execute(req: FastifyRequest, reply: FastifyReply) {
     const { id } = this.userParamsSchema.parse(req.params);
+
     const { name, email, password, type } = this.userBodySchema.parse(req.body);
 
     if (!name && !email && !password && !type)

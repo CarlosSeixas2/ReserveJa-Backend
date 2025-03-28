@@ -17,23 +17,23 @@ export class UpdateReserveService {
   });
 
   private reserveBodySchema = z.object({
-    userId: z.string().nonempty(),
     roomId: z.string().nonempty(),
     status: z.enum(["Pendente", "Aprovada", "Recusada"]).optional(),
     time: z.string().optional(),
   });
 
   public async execute(req: FastifyRequest, reply: FastifyReply) {
+    const user = (await req.user) as { id: string; tipo: string };
+
     const { id } = this.reserveParamsSchema.parse(req.params);
-    const { userId, roomId, status, time } = this.reserveBodySchema.parse(
-      req.body
-    );
+
+    const { roomId, status, time } = this.reserveBodySchema.parse(req.body);
 
     const reserve = await this.reserveRepository.listById(id);
 
     if (!reserve) throw new AppError("Reserva não encontrada", 404);
 
-    const checkUser = await this.userRepository.listById(userId);
+    const checkUser = await this.userRepository.listById(user.id);
 
     const checkRoom = await this.roomRepository.listById(roomId);
 
@@ -42,7 +42,7 @@ export class UpdateReserveService {
 
     await this.reserveRepository.update(id, {
       salaId: roomId,
-      usuarioId: userId,
+      usuarioId: user.id,
       status: status ?? reserve.status,
       horario: time ?? reserve.horario,
     });

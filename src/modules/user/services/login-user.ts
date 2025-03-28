@@ -24,10 +24,10 @@ export class LoginUserService {
 
     if (!isPasswordCorrect) throw new AppError("Senha incorreta", 401);
 
-    const token = await GenerateToken({ id: user.id });
+    const token = await GenerateToken({ id: user.id, tipo: user.tipo });
 
-    // const { senha, ...userWithoutPassword } = user;
-
-    return reply.code(200).send({ token });
+    return reply
+      .code(200)
+      .send({ message: "Login realizado com sucesso", token });
   }
 }

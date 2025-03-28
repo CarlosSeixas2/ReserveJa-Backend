@@ -6,6 +6,7 @@ export interface IReserve {
   usuarioId: string;
   horario: string;
   status: Status;
+  data: Date;
 }
 
 export class ReserveMemory {
@@ -21,7 +22,8 @@ export class ReserveMemory {
 
   public async listRoomReserves(
     roomId: string,
-    time: string
+    time: string,
+    date: Date
   ): Promise<IReserve[]> {
     return this.reserves.filter(
       (reserve) =>

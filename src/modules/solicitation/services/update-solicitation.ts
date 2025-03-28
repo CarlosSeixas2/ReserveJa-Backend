@@ -11,7 +11,6 @@ export class UpdateSolicitationService {
   });
 
   private solicitationBodySchema = z.object({
-    userId: z.string().optional(),
     roomId: z.string().optional(),
     time: z.string().optional(),
     status: z.enum(["Pendente", "Aprovada", "Recusada"]).optional(),
@@ -20,9 +19,11 @@ export class UpdateSolicitationService {
   });
 
   async execute(req: FastifyRequest, reply: FastifyReply) {
+    const user = req.user as { id: string; tipo: string };
+
     const { id } = this.solicitationParamsSchema.parse(req.params);
 
-    const { userId, roomId, time, status, reason, approverId } =
+    const { roomId, time, status, reason, approverId } =
       this.solicitationBodySchema.parse(req.body);
 
     const solicitations = await this.solicitationRepository.findById(id);
@@ -30,7 +31,7 @@ export class UpdateSolicitationService {
     if (!solicitations) throw new AppError("Solicitação não encontrada", 404);
 
     await this.solicitationRepository.update(id, {
-      usuarioId: userId ?? solicitations.usuarioId,
+      usuarioId: user.id ?? solicitations.usuarioId,
       salaId: roomId ?? solicitations.salaId,
       horario: time ?? solicitations.horario,
       status: status ?? solicitations.status,
