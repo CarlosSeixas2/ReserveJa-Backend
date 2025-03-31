@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { AppError } from "../../src/errors/app-error";
 import { UserMemory } from "../in-memory/user-memory";
-import { ZodError } from "zod";
+import { date, ZodError } from "zod";
 import { ReserveMemory } from "../in-memory/reserve-memory";
 import { CreateReserveService } from "../../src/modules/reserve/services/create-reserve";
 import { ClassRoomMemory } from "../in-memory/class-room-memory";
@@ -49,7 +49,9 @@ describe("Create Reserve Service", () => {
     const req = {
       body: {
         roomId: room.id,
-        time: "08:00",
+        inicial_time: "08:00",
+        final_time: "10:00",
+        date: "2023-10-01T08:00:00Z",
       },
       user: { id: user.id },
     } as FastifyRequest;
@@ -71,7 +73,9 @@ describe("Create Reserve Service", () => {
     const req = {
       body: {
         roomId: room.id,
-        time: "08:00",
+        inicial_time: "08:00",
+        final_time: "10:00",
+        date: "2023-10-01T08:00:00Z",
       },
       user: {},
     } as FastifyRequest;
@@ -92,8 +96,10 @@ describe("Create Reserve Service", () => {
 
     const req = {
       body: {
-        roomId: "123",
-        time: "08:00",
+        roomId: "232",
+        inicial_time: "08:00",
+        final_time: "10:00",
+        date: "2023-10-01T08:00:00Z",
       },
       user: { id: user.id },
     } as FastifyRequest;
@@ -127,18 +133,30 @@ describe("Create Reserve Service", () => {
       disponivel: true,
     });
 
+    const reqBody = {
+      roomId: room.id,
+      inicial_time: "08:00",
+      final_time: "10:00",
+      date: "2023-10-01T08:00:00Z",
+    };
+
     const req = {
-      body: {
-        roomId: room.id,
-        time: "08:00",
-      },
+      body: reqBody,
       user: { id: user.id },
     } as FastifyRequest;
 
     const reply = mockReply();
+
     await createReserveService.execute(req, reply);
+
     await expect(createReserveService.execute(req, reply)).rejects.toThrow(
       AppError
     );
+    await expect(
+      createReserveService.execute(req, reply)
+    ).rejects.toMatchObject({
+      message: "Sala já reservada, por favor check os horários",
+      statusCode: 400,
+    });
   });
 });

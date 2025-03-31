@@ -26,7 +26,6 @@ export class CreateReserveService {
       this.reserveBodySchema.parse(req.body);
 
     const checkUser = await this.userRepository.listById(user.id);
-
     const checkRoom = await this.roomRepository.listById(roomId);
 
     if (!checkUser || !checkRoom)
@@ -35,11 +34,12 @@ export class CreateReserveService {
     if (checkUser.tipo !== "Professor")
       throw new AppError("Acesso não autorizado", 403);
 
+    const reservationDate = new Date(date);
     const findRoomReserves = await this.reserveRepository.listRoomReserves(
       roomId,
       inicial_time,
       final_time,
-      new Date(date)
+      reservationDate
     );
 
     if (findRoomReserves.length > 0)
@@ -51,6 +51,7 @@ export class CreateReserveService {
       horarioInicio: inicial_time,
       horarioFim: final_time,
       status: "Aprovada",
+      data: reservationDate,
     });
 
     return reply.code(201).send({ message: "Reserva criada com sucesso" });
