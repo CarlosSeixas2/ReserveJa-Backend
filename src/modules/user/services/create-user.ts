@@ -19,6 +19,7 @@ export class CreateUserService {
     const { name, email, password, type } = this.userBodySchema.parse(req.body);
 
     const checkEmail = await this.userRepository.findByEmail(email);
+
     if (checkEmail) throw new AppError("E-mail já cadastrado", 400);
 
     const passwordHash = await CreateHashPassword(password);

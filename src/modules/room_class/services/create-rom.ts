@@ -1,7 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { RoomClassRepository } from "../repository/room-class-repository";
 import { z } from "zod";
-import { UserRepository } from "../../user/repository/user-repository";
 import { AppError } from "../../../errors/app-error";
 
 export class CreateRoomService {

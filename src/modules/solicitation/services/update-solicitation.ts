@@ -11,7 +11,8 @@ export class UpdateSolicitationService {
   });
 
   private solicitationBodySchema = z.object({
-    time: z.string().optional(),
+    inicial_time: z.string().optional(),
+    final_time: z.string().optional(),
     status: z.enum(["Pendente", "Aprovada", "Recusada"]).optional(),
     reason: z.string().optional(),
     approverId: z.string().optional(),
@@ -21,7 +22,7 @@ export class UpdateSolicitationService {
   async execute(req: FastifyRequest, reply: FastifyReply) {
     const { id } = this.solicitationParamsSchema.parse(req.params);
 
-    const { time, status, reason, approverId, date } =
+    const { inicial_time, final_time, status, reason, approverId, date } =
       this.solicitationBodySchema.parse(req.body);
 
     let parsedDate: Date | undefined;
@@ -36,7 +37,8 @@ export class UpdateSolicitationService {
     if (!solicitations) throw new AppError("Solicitação não encontrada", 404);
 
     await this.solicitationRepository.update(id, {
-      horario: time ?? solicitations.horario,
+      horarioInicio: inicial_time ?? solicitations.horarioInicio,
+      horarioFim: final_time ?? solicitations.horarioFim,
       status: status ?? solicitations.status,
       motivo: reason ?? solicitations.motivo,
       aprovadorId: approverId ?? solicitations.aprovadorId,

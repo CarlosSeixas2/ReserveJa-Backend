@@ -16,7 +16,8 @@ export class UpdateReserveService {
 
   private reserveBodySchema = z.object({
     status: z.enum(["Pendente", "Aprovada", "Recusada"]).optional(),
-    time: z.string().optional(),
+    inicial_time: z.string().optional(),
+    final_time: z.string().optional(),
     date: z.string().optional(),
   });
 
@@ -25,7 +26,8 @@ export class UpdateReserveService {
 
     const { id } = this.reserveParamsSchema.parse(req.params);
 
-    const { status, time, date } = this.reserveBodySchema.parse(req.body);
+    const { status, inicial_time, final_time, date } =
+      this.reserveBodySchema.parse(req.body);
 
     let parsedDate: Date | undefined;
 
@@ -44,7 +46,8 @@ export class UpdateReserveService {
 
     await this.reserveRepository.update(id, {
       status: status ?? reserve.status,
-      horario: time ?? reserve.horario,
+      horarioInicio: inicial_time ?? reserve.horarioInicio,
+      horarioFim: final_time ?? reserve.horarioFim,
       data: parsedDate ?? reserve.data,
     });
 

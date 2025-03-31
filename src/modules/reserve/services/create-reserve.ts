@@ -1,5 +1,5 @@
+import { z } from "zod";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { date, z } from "zod";
 import { ReserveRepository } from "../repository/reserve-repository";
 import { UserRepository } from "../../user/repository/user-repository";
 import { RoomClassRepository } from "../../room_class/repository/room-class-repository";
@@ -14,18 +14,16 @@ export class CreateReserveService {
 
   private reserveBodySchema = z.object({
     roomId: z.string().nonempty(),
-    time: z.string().nonempty(),
-    date: z.string().nonempty(),
+    inicial_time: z.string().nonempty(),
+    final_time: z.string().nonempty(),
+    date: z.string().datetime(),
   });
 
   public async execute(req: FastifyRequest, reply: FastifyReply) {
     const user = (await req.user) as { id: string; tipo: string };
 
-    const { roomId, time, date } = this.reserveBodySchema.parse(req.body);
-
-    const parsedDate = new Date(date);
-
-    if (isNaN(parsedDate.getTime())) throw new AppError("Data inválida", 400);
+    const { roomId, inicial_time, final_time, date } =
+      this.reserveBodySchema.parse(req.body);
 
     const checkUser = await this.userRepository.listById(user.id);
 
@@ -35,21 +33,23 @@ export class CreateReserveService {
       throw new AppError("Usuário ou Sala não encontrado(a)", 404);
 
     if (checkUser.tipo !== "Professor")
-      throw new AppError("Apenas professores podem reservar salas", 403);
+      throw new AppError("Acesso não autorizado", 403);
 
     const findRoomReserves = await this.reserveRepository.listRoomReserves(
       roomId,
-      time,
-      parsedDate
+      inicial_time,
+      final_time,
+      new Date(date)
     );
 
     if (findRoomReserves.length > 0)
-      throw new AppError("Sala já reservada nesse horário", 400);
+      throw new AppError("Sala já reservada, por favor check os horários", 400);
 
     await this.reserveRepository.create({
       salaId: roomId,
       usuarioId: user.id,
-      horario: time,
+      horarioInicio: inicial_time,
+      horarioFim: final_time,
       status: "Aprovada",
     });
 

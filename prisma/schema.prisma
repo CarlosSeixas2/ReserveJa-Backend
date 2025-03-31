@@ -43,25 +43,27 @@ model Sala {
 }
 
 model Reserva {
-  id        String   @id @default(cuid())
-  usuarioId String
-  salaId    String
-  horario   String
-  data      DateTime @default(now())
-  status    Status
-  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
-  sala      Sala     @relation(fields: [salaId], references: [id])
+  id            String   @id @default(cuid())
+  usuarioId     String
+  salaId        String
+  horarioInicio String
+  horarioFim    String
+  data          DateTime @default(now())
+  status        Status
+  usuario       Usuario  @relation(fields: [usuarioId], references: [id])
+  sala          Sala     @relation(fields: [salaId], references: [id])
 }
 
 model Solicitacao {
-  id          String   @id @default(cuid())
-  usuarioId   String
-  salaId      String
-  horario     String
-  data        DateTime @default(now())
-  status      Status
-  motivo      String
-  aprovadorId String?
-  usuario     Usuario  @relation(fields: [usuarioId], references: [id])
-  sala        Sala     @relation(fields: [salaId], references: [id])
+  id            String   @id @default(cuid())
+  usuarioId     String
+  salaId        String
+  horarioInicio String
+  horarioFim    String
+  data          DateTime @default(now())
+  status        Status
+  motivo        String
+  aprovadorId   String?
+  usuario       Usuario  @relation(fields: [usuarioId], references: [id])
+  sala          Sala     @relation(fields: [salaId], references: [id])
 }

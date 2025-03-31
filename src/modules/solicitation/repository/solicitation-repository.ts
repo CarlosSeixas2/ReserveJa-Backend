@@ -73,4 +73,47 @@ export class SolicitationRepository {
 
   //   return solicitation;
   // }
+
+  public async listSolicitationsReserves(
+    roomId: string,
+    inicial_time: string,
+    final_time: string,
+    date: Date
+  ) {
+    const startOfDay = new Date(date.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(date.setHours(23, 59, 59, 999));
+
+    const [inicialHour, inicialMinute] = inicial_time.split(":").map(Number);
+    const [finalHour, finalMinute] = final_time.split(":").map(Number);
+
+    const inicialDateTime = new Date(date);
+    inicialDateTime.setHours(inicialHour, inicialMinute);
+
+    const finalDateTime = new Date(date);
+    finalDateTime.setHours(finalHour, finalMinute);
+
+    const reserves = await prisma.solicitacao.findMany({
+      where: {
+        salaId: roomId,
+        status: "Aprovada",
+        data: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+      },
+    });
+
+    return reserves.filter(({ data, horarioInicio, horarioFim }) => {
+      const [startHour, startMinute] = horarioInicio.split(":").map(Number);
+      const [endHour, endMinute] = horarioFim.split(":").map(Number);
+
+      const startsAt = new Date(data);
+      startsAt.setHours(startHour, startMinute);
+
+      const endsAt = new Date(data);
+      endsAt.setHours(endHour, endMinute);
+
+      return inicialDateTime < endsAt && finalDateTime > startsAt;
+    });
+  }
 }

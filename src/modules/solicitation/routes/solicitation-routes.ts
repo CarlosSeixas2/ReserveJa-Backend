@@ -10,6 +10,11 @@ export async function solicitationRoutes(fastify: FastifyInstance) {
     { preHandler: authMiddleware },
     solicitationController.create
   );
+  fastify.get(
+    "/aproved/:id",
+    { preHandler: authMiddleware },
+    solicitationController.aproved
+  );
   fastify.put(
     "/:id",
     { preHandler: authMiddleware },

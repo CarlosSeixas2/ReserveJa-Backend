@@ -1,4 +1,3 @@
-import { ReserveRepository } from "../../reserve/repository/reserve-repository";
 import { RoomClassRepository } from "../../room_class/repository/room-class-repository";
 import { UserRepository } from "../../user/repository/user-repository";
 import { SolicitationRepository } from "../repository/solicitation-repository";
@@ -8,12 +7,10 @@ export function makeCreateSolicitationService() {
   const solicitationRepository = new SolicitationRepository();
   const userRepository = new UserRepository();
   const roomRepository = new RoomClassRepository();
-  const reserveRepository = new ReserveRepository();
 
   return new CreateSolicitationService(
     userRepository,
     roomRepository,
-    solicitationRepository,
-    reserveRepository
+    solicitationRepository
   );
 }

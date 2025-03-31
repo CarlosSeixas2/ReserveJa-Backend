@@ -4,28 +4,26 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { UserRepository } from "../../user/repository/user-repository";
 import { SolicitationRepository } from "../repository/solicitation-repository";
 import { RoomClassRepository } from "../../room_class/repository/room-class-repository";
-import { ReserveRepository } from "../../reserve/repository/reserve-repository";
 
 export class CreateSolicitationService {
   constructor(
     private userRepository: UserRepository,
     private roomRepository: RoomClassRepository,
-    private solicitationRepository: SolicitationRepository,
-    private reserveRepository: ReserveRepository
+    private solicitationRepository: SolicitationRepository
   ) {}
 
   private solicitationBodySchema = z.object({
     roomId: z.string(),
-    time: z.string(),
+    inicial_time: z.string(),
+    final_time: z.string(),
     reason: z.string(),
   });
 
   public async execute(req: FastifyRequest, reply: FastifyReply) {
     const user = (await req.user) as { id: string; tipo: string };
 
-    const { roomId, time, reason } = this.solicitationBodySchema.parse(
-      req.body
-    );
+    const { roomId, inicial_time, final_time, reason } =
+      this.solicitationBodySchema.parse(req.body);
 
     const checkUser = await this.userRepository.listById(user.id);
 
@@ -34,21 +32,11 @@ export class CreateSolicitationService {
     if (!checkUser || !checkRoom)
       throw new AppError("Usuário ou Sala não encontrado(a)", 404);
 
-    let date = new Date();
-
-    const findRoomReserves = await this.reserveRepository.listRoomReserves(
-      roomId,
-      time,
-      date
-    );
-
-    if (findRoomReserves.length > 0)
-      throw new AppError("Sala já reservada nesse horário", 400);
-
     await this.solicitationRepository.create({
       usuarioId: user.id,
       salaId: roomId,
-      horario: time,
+      horarioInicio: inicial_time,
+      horarioFim: final_time,
       status: "Pendente",
       motivo: reason,
     });
