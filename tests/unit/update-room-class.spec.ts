@@ -3,7 +3,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { AppError } from "../../src/errors/app-error";
 import { ZodError } from "zod";
 import { ClassRoomMemory } from "../in-memory/class-room-memory";
-import { UpdateRoomService } from "../../src/modules/room_class/services/update-rom";
+import { UpdateRoomService } from "../../src/modules/class_room/services/update-rom";
 
 let roomclassRepository: ClassRoomMemory;
 let updateRoomClassService: UpdateRoomService;

@@ -1,6 +1,11 @@
 import { Prisma, Reserva } from "@prisma/client";
 import prisma from "../../../database";
 
+// interface IHorario {
+//   horarioInicio: string;
+//   horarioFim: string;
+// }
+
 export class ReserveRepository {
   public async listAll(): Promise<Reserva[]> {
     const reserves = await prisma.reserva.findMany();
@@ -87,5 +92,38 @@ export class ReserveRepository {
         id,
       },
     });
+  }
+
+  public async searchReserveFromDate(id: string, date: Date) {
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const reserves = await prisma.reserva.findMany({
+      where: {
+        salaId: id,
+        status: "Aprovada",
+        data: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+      },
+    });
+
+    const uniqueTimes = new Set<string>();
+    const horario: any = [];
+
+    reserves.map((item) => {
+      const key = `${item.horarioInicio}-${item.horarioFim}`;
+      if (!uniqueTimes.has(key)) {
+        uniqueTimes.add(key);
+        horario.push(item.horarioInicio);
+        horario.push(item.horarioFim);
+      }
+    });
+
+    return horario;
   }
 }

@@ -1,4 +1,4 @@
-import { RoomClassRepository } from "../repository/room-class-repository";
+import { RoomClassRepository } from "../repository/class-room-repository";
 import { DeleteRoomService } from "../services/delete-rom";
 
 export function makeDeleteRoomService() {

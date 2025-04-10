@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { RoomClassRepository } from "../repository/room-class-repository";
+import { RoomClassRepository } from "../repository/class-room-repository";
 import { AppError } from "../../../errors/app-error";
 
 export class FindAllRoomService {

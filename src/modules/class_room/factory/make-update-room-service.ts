@@ -1,4 +1,4 @@
-import { RoomClassRepository } from "../repository/room-class-repository";
+import { RoomClassRepository } from "../repository/class-room-repository";
 import { UpdateRoomService } from "../services/update-rom";
 
 export function makeUpdateRoomService() {

@@ -4,6 +4,7 @@ import { makeUpdateReserveService } from "../factory/make-update-reserve-service
 import { makeDeleteReserveService } from "../factory/make-delete-reserve-service";
 import { makeFindAllReserveService } from "../factory/make-find-all-reserve-service";
 import { makeFindByIdReserveService } from "../factory/make-find-by-id-reserve-service";
+import { makeSearchReserveFromDate } from "../factory/make-search-reserve-from-date";
 
 export class ReserveController {
   async create(req: FastifyRequest, reply: FastifyReply) {
@@ -29,5 +30,10 @@ export class ReserveController {
   async get(req: FastifyRequest, reply: FastifyReply) {
     const createFindByIdService = makeFindByIdReserveService();
     await createFindByIdService.execute(req, reply);
+  }
+
+  async searchReserveFromDate(req: FastifyRequest, reply: FastifyReply) {
+    const searchReserveFromDateService = makeSearchReserveFromDate();
+    await searchReserveFromDateService.execute(req, reply);
   }
 }

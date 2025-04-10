@@ -18,11 +18,11 @@ export class LoginUserService {
 
     const user = await this.userRepository.findByEmail(email);
 
-    if (!user) throw new AppError("Usuário não encontrado", 404);
+    if (!user) throw new AppError("Usuário/Senha incorreto", 404);
 
     const isPasswordCorrect = await ComparePassword(password, user.senha);
 
-    if (!isPasswordCorrect) throw new AppError("Senha incorreta", 401);
+    if (!isPasswordCorrect) throw new AppError("Usuário/Senha incorreto", 401);
 
     const token = await GenerateToken({ id: user.id, tipo: user.tipo });
 

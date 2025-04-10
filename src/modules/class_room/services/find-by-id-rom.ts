@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { RoomClassRepository } from "../repository/room-class-repository";
+import { RoomClassRepository } from "../repository/class-room-repository";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { AppError } from "../../../errors/app-error";
 

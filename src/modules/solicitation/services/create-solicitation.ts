@@ -3,7 +3,7 @@ import { AppError } from "../../../errors/app-error";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { UserRepository } from "../../user/repository/user-repository";
 import { SolicitationRepository } from "../repository/solicitation-repository";
-import { RoomClassRepository } from "../../room_class/repository/room-class-repository";
+import { RoomClassRepository } from "../../class_room/repository/class-room-repository";
 
 export class CreateSolicitationService {
   constructor(

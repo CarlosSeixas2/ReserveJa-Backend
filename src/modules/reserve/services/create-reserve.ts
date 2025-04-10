@@ -2,7 +2,7 @@ import { z } from "zod";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { ReserveRepository } from "../repository/reserve-repository";
 import { UserRepository } from "../../user/repository/user-repository";
-import { RoomClassRepository } from "../../room_class/repository/room-class-repository";
+import { RoomClassRepository } from "../../class_room/repository/class-room-repository";
 import { AppError } from "../../../errors/app-error";
 
 export class CreateReserveService {

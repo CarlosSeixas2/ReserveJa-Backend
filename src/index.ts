@@ -8,7 +8,7 @@ import helmet from "@fastify/helmet";
 
 import { userRoutes } from "./modules/user/routes/user-routes";
 import { errorMiddleware } from "./middlewares/error-middleware";
-import { roomRoutes } from "./modules/room_class/routes/room-routes";
+import { roomRoutes } from "./modules/class_room/routes/room-routes";
 import { authMiddleware } from "./middlewares/auth-middleware";
 import { reserveRoutes } from "./modules/reserve/routes/reserve-routes";
 import { solicitationRoutes } from "./modules/solicitation/routes/solicitation-routes";

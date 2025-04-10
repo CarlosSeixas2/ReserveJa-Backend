@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { ClassRoomMemory } from "../in-memory/class-room-memory";
-import { FindAllRoomService } from "../../src/modules/room_class/services/find-all-room";
+import { FindAllRoomService } from "../../src/modules/class_room/services/find-all-room";
 import { AppError } from "../../src/errors/app-error";
 
 let roomclassRepository: ClassRoomMemory;
