@@ -25,51 +25,85 @@ enum Status {
 }
 
 model Usuario {
-  id          String        @id @default(cuid())
-  nome        String
-  email       String        @unique
-  senha       String
-  tipo        Tipo
-  Reserva     Reserva[]
-  Solicitacao Solicitacao[]
+  id      String    @id @default(cuid())
+  nome    String
+  email   String    @unique
+  senha   String
+  tipo    Tipo
+  Reserva Reserva[]
+
+  solicitacoesFeitas    Solicitacao[] @relation("UsuarioSolicitacoes")
+  solicitacoesAprovadas Solicitacao[] @relation("AprovadorSolicitacoes")
 }
 
 model Sala {
-  id          String        @id @default(cuid())
-  nome        String
-  capacidade  Int
-  Reserva     Reserva[]
-  Solicitacao Solicitacao[]
+  id         String  @id @default(cuid())
+  nome       String
+  capacidade Int
+  imagem     String?
+
+  Reserva      Reserva[]
+  Solicitacao  Solicitacao[]
+  Horario_Sala Horario_Sala[]
 }
 
 model Reserva {
-  id            String   @id @default(cuid())
-  usuarioId     String
-  salaId        String
-  horarioInicio String
-  horarioFim    String
-  data          DateTime @default(now())
-  status        Status
-  usuario       Usuario  @relation(fields: [usuarioId], references: [id])
-  sala          Sala     @relation(fields: [salaId], references: [id])
+  id        String   @id @default(cuid())
+  usuarioId String
+  salaId    String
+  data      DateTime @default(now())
+
+  usuario             Usuario               @relation(fields: [usuarioId], references: [id])
+  sala                Sala                  @relation(fields: [salaId], references: [id])
+  Horarios_Reservados Horarios_Reservados[]
 }
 
 model Solicitacao {
-  id            String   @id @default(cuid())
-  usuarioId     String
-  salaId        String
-  horarioInicio String
-  horarioFim    String
-  data          DateTime @default(now())
-  status        Status
-  motivo        String
-  aprovadorId   String?
-  usuario       Usuario  @relation(fields: [usuarioId], references: [id])
-  sala          Sala     @relation(fields: [salaId], references: [id])
+  id          String   @id @default(cuid())
+  usuarioId   String
+  salaId      String
+  data        DateTime @default(now())
+  motivo      String
+  aprovadorId String?
+
+  usuario             Usuario                @relation("UsuarioSolicitacoes", fields: [usuarioId], references: [id])
+  aprovador           Usuario?               @relation("AprovadorSolicitacoes", fields: [aprovadorId], references: [id])
+  sala                Sala                   @relation(fields: [salaId], references: [id])
+  Horario_Solicitados Horarios_Solicitados[]
 }
 
 model Horario {
-  id            String @id @default(cuid())
+  id            String         @id @default(cuid())
   horarioInicio String
   horarioFim    String
+  Horario_Sala  Horario_Sala[]
+}
+
+model Horario_Sala {
+  id        String @id @default(cuid())
+  salaId    String
+  horarioId String
+
+  sala                Sala                   @relation(fields: [salaId], references: [id])
+  horario             Horario                @relation(fields: [horarioId], references: [id])
+  Horario_Solicitados Horarios_Solicitados[]
+  Horarios_Reservados Horarios_Reservados[]
+}
+
+model Horarios_Solicitados {
+  id            String @id @default(cuid())
+  solicitacaoId String
+  horarioSalaId String
+
+  horarioSala Horario_Sala @relation(fields: [horarioSalaId], references: [id])
+  solicitacao Solicitacao  @relation(fields: [solicitacaoId], references: [id])
+}
+
+model Horarios_Reservados {
+  id            String @id @default(cuid())
+  reservaId     String
+  horarioSalaId String
+
+  horarioSala Horario_Sala @relation(fields: [horarioSalaId], references: [id])
+  reserva     Reserva      @relation(fields: [reservaId], references: [id])
 }

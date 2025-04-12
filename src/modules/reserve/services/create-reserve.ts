@@ -1,58 +1,77 @@
 import { z } from "zod";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { ReserveRepository } from "../repository/reserve-repository";
 import { UserRepository } from "../../user/repository/user-repository";
 import { RoomClassRepository } from "../../class_room/repository/class-room-repository";
 import { AppError } from "../../../errors/app-error";
+import { ReserveRepository } from "../../reserve/repository/reserve-repository";
+import { ReservesTimeRepository } from "../../reserves_time/repository/reserves-time-repository";
+import { TimeRepository } from "../../time/repository/time-repository";
+import { TimeClassRoomRepository } from "../../time_class_room/repository/time-class-room-repository";
 
 export class CreateReserveService {
   constructor(
     private reserveRepository: ReserveRepository,
     private userRepository: UserRepository,
-    private roomRepository: RoomClassRepository
+    private roomRepository: RoomClassRepository,
+    private reservesTimeRepository: ReservesTimeRepository,
+    private timeClassRoomRepository: TimeClassRoomRepository
   ) {}
 
   private reserveBodySchema = z.object({
-    roomId: z.string().nonempty(),
-    inicial_time: z.string().nonempty(),
-    final_time: z.string().nonempty(),
-    date: z.string().datetime(),
+    roomId: z.string(),
+    date: z.string().datetime().optional().default(new Date().toISOString()),
+    times: z
+      .array(z.string().nonempty("Horário não pode ser vazio"))
+      .nonempty("Deve haver pelo menos um horário"),
   });
 
   public async execute(req: FastifyRequest, reply: FastifyReply) {
     const user = (await req.user) as { id: string; tipo: string };
 
-    const { roomId, inicial_time, final_time, date } =
-      this.reserveBodySchema.parse(req.body);
+    const { roomId, date, times } = this.reserveBodySchema.parse(req.body);
+    const parsedDate = new Date(date);
 
-    const checkUser = await this.userRepository.listById(user.id);
-    const checkRoom = await this.roomRepository.listById(roomId);
+    const userExists = await this.userRepository.listById(user.id);
+    const roomExists = await this.roomRepository.listById(roomId);
 
-    if (!checkUser || !checkRoom)
+    if (!userExists || !roomExists) {
       throw new AppError("Usuário ou Sala não encontrado(a)", 404);
+    }
 
-    if (checkUser.tipo !== "Professor")
+    if (userExists.tipo !== "Professor") {
       throw new AppError("Acesso não autorizado", 403);
+    }
 
-    const reservationDate = new Date(date);
-    const findRoomReserves = await this.reserveRepository.listRoomReserves(
-      roomId,
-      inicial_time,
-      final_time,
-      reservationDate
-    );
+    for (const timeId of times) {
+      const timeExists = await this.timeClassRoomRepository.listById(timeId);
 
-    if (findRoomReserves.length > 0)
-      throw new AppError("Sala já reservada, por favor check os horários", 400);
+      if (!timeExists) {
+        throw new AppError("Horário não encontrado", 404);
+      }
 
-    await this.reserveRepository.create({
+      const existingReserveinTime =
+        await this.reservesTimeRepository.findReserveByDate(
+          timeId,
+          parsedDate.toISOString()
+        );
+
+      if (existingReserveinTime) {
+        throw new AppError(
+          `Já existe uma reserva para o horário ${timeId} na data ${parsedDate.toLocaleDateString()}`,
+          409
+        );
+      }
+    }
+
+    const newReserve = await this.reserveRepository.create({
       salaId: roomId,
       usuarioId: user.id,
-      horarioInicio: inicial_time,
-      horarioFim: final_time,
-      status: "Aprovada",
-      data: reservationDate,
+      data: parsedDate,
     });
+
+    for (const timeId of times) {
+      await this.reservesTimeRepository.create(newReserve.id, timeId);
+    }
 
     return reply.code(201).send({ message: "Reserva criada com sucesso" });
   }

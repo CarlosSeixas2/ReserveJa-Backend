@@ -12,10 +12,10 @@ export class ReserveController {
     await createReserveService.execute(req, reply);
   }
 
-  async update(req: FastifyRequest, reply: FastifyReply) {
-    const createUpdateService = makeUpdateReserveService();
-    await createUpdateService.execute(req, reply);
-  }
+  // async update(req: FastifyRequest, reply: FastifyReply) {
+  //   const createUpdateService = makeUpdateReserveService();
+  //   await createUpdateService.execute(req, reply);
+  // }
 
   async delete(req: FastifyRequest, reply: FastifyReply) {
     const createDeleteService = makeDeleteReserveService();
@@ -32,8 +32,8 @@ export class ReserveController {
     await createFindByIdService.execute(req, reply);
   }
 
-  async searchReserveFromDate(req: FastifyRequest, reply: FastifyReply) {
-    const searchReserveFromDateService = makeSearchReserveFromDate();
-    await searchReserveFromDateService.execute(req, reply);
-  }
+  // async searchReserveFromDate(req: FastifyRequest, reply: FastifyReply) {
+  //   const searchReserveFromDateService = makeSearchReserveFromDate();
+  //   await searchReserveFromDateService.execute(req, reply);
+  // }
 }
