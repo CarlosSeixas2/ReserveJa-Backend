@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,27 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Tipo {
+enum TipoUsuario {
   Professor
   Aluno
 }
 
-enum Status {
-  Pendente
-  Aprovada
-  Recusada
+enum StatusSolicitacao {
+  PENDENTE
+  APROVADA
+  RECUSADA
 }
 
 model Usuario {
-  id      String    @id @default(cuid())
-  nome    String
-  email   String    @unique
-  senha   String
-  tipo    Tipo
-  Reserva Reserva[]
+  id    String      @id @default(cuid())
+  nome  String
+  email String      @unique
+  senha String
+  tipo  TipoUsuario
 
-  solicitacoesFeitas    Solicitacao[] @relation("UsuarioSolicitacoes")
-  solicitacoesAprovadas Solicitacao[] @relation("AprovadorSolicitacoes")
+  reservas              Reserva[]
+  solicitacoesCriadas   Solicitacao[] @relation("SolicitacoesCriadas")
+  solicitacoesAprovadas Solicitacao[] @relation("SolicitacoesAprovadas")
 }
 
 model Sala {
@@ -42,68 +36,72 @@ model Sala {
   capacidade Int
   imagem     String?
 
-  Reserva      Reserva[]
-  Solicitacao  Solicitacao[]
-  Horario_Sala Horario_Sala[]
+  reservas     Reserva[]
+  solicitacoes Solicitacao[]
+  horariosSala HorarioSala[]
 }
 
 model Reserva {
   id        String   @id @default(cuid())
   usuarioId String
   salaId    String
-  data      DateTime @default(now())
+  criadoEm  DateTime @default(now())
 
-  usuario             Usuario               @relation(fields: [usuarioId], references: [id])
-  sala                Sala                  @relation(fields: [salaId], references: [id])
-  Horarios_Reservados Horarios_Reservados[]
+  usuario            Usuario            @relation(fields: [usuarioId], references: [id])
+  sala               Sala               @relation(fields: [salaId], references: [id])
+  horariosReservados HorarioReservado[]
 }
 
 model Solicitacao {
-  id          String   @id @default(cuid())
+  id          String            @id @default(cuid())
   usuarioId   String
   salaId      String
-  data        DateTime @default(now())
+  criadoEm    DateTime          @default(now())
   motivo      String
   aprovadorId String?
+  status      StatusSolicitacao @default(PENDENTE)
 
-  usuario             Usuario                @relation("UsuarioSolicitacoes", fields: [usuarioId], references: [id])
-  aprovador           Usuario?               @relation("AprovadorSolicitacoes", fields: [aprovadorId], references: [id])
-  sala                Sala                   @relation(fields: [salaId], references: [id])
-  Horario_Solicitados Horarios_Solicitados[]
+  usuario             Usuario             @relation("SolicitacoesCriadas", fields: [usuarioId], references: [id])
+  aprovador           Usuario?            @relation("SolicitacoesAprovadas", fields: [aprovadorId], references: [id])
+  sala                Sala                @relation(fields: [salaId], references: [id])
+  horariosSolicitados HorarioSolicitado[]
 }
 
 model Horario {
-  id            String         @id @default(cuid())
-  horarioInicio String
-  horarioFim    String
-  Horario_Sala  Horario_Sala[]
+  id     String @id @default(cuid())
+  inicio String
+  fim    String
+
+  horariosSala HorarioSala[]
 }
 
-model Horario_Sala {
+model HorarioSala {
   id        String @id @default(cuid())
   salaId    String
   horarioId String
 
-  sala                Sala                   @relation(fields: [salaId], references: [id])
-  horario             Horario                @relation(fields: [horarioId], references: [id])
-  Horario_Solicitados Horarios_Solicitados[]
-  Horarios_Reservados Horarios_Reservados[]
+  sala                Sala                @relation(fields: [salaId], references: [id])
+  horario             Horario             @relation(fields: [horarioId], references: [id])
+  horariosSolicitados HorarioSolicitado[]
+  horariosReservados  HorarioReservado[]
 }
 
-model Horarios_Solicitados {
-  id            String @id @default(cuid())
+model HorarioSolicitado {
+  id            String   @id @default(cuid())
   solicitacaoId String
   horarioSalaId String
+  criadoEm      DateTime @default(now())
 
-  horarioSala Horario_Sala @relation(fields: [horarioSalaId], references: [id])
-  solicitacao Solicitacao  @relation(fields: [solicitacaoId], references: [id])
+  solicitacao Solicitacao @relation(fields: [solicitacaoId], references: [id])
+  horarioSala HorarioSala @relation(fields: [horarioSalaId], references: [id])
 }
 
-model Horarios_Reservados {
-  id            String @id @default(cuid())
+model HorarioReservado {
+  id            String   @id @default(cuid())
   reservaId     String
   horarioSalaId String
+  criadoEm      DateTime @default(now())
 
-  horarioSala Horario_Sala @relation(fields: [horarioSalaId], references: [id])
-  reserva     Reserva      @relation(fields: [reservaId], references: [id])
+  reserva     Reserva     @relation(fields: [reservaId], references: [id])
+  horarioSala HorarioSala @relation(fields: [horarioSalaId], references: [id])
 }

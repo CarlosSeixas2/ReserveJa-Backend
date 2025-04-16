@@ -14,24 +14,24 @@ export class CreateTimeService {
   public async execute(req: FastifyRequest, reply: FastifyReply) {
     const { inicialTime, finalTime } = this.timeBodySchema.parse(req.body);
 
-    const timeExist = await this.timeRepository.findByTime(
+    const timeAlreadyExist = await this.timeRepository.hasTimeOverlap(
       inicialTime,
       finalTime
     );
 
-    if (timeExist)
+    if (timeAlreadyExist)
       throw new AppError(
-        `Horário já cadastrado entre ${inicialTime} e ${finalTime}`,
+        "Intervalo de horário se sobrepõe a um já existente.",
         409
       );
 
     await this.timeRepository.create({
-      horarioInicio: inicialTime,
-      horarioFim: finalTime,
+      inicio: inicialTime,
+      fim: finalTime,
     });
 
     return reply.status(201).send({
-      message: "Horário criado com sucesso",
+      message: "Horário cadastrado com sucesso",
     });
   }
 }

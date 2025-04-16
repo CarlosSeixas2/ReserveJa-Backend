@@ -13,14 +13,14 @@ export class DeleteTimeService {
   public async execute(req: FastifyRequest, reply: FastifyReply) {
     const { id } = this.timeParamsSchema.parse(req.params);
 
-    const time = await this.timeRepository.listById(id);
+    const timeExist = await this.timeRepository.listById(id);
 
-    if (!time) throw new AppError("Horário não encontrado", 404);
+    if (!timeExist) throw new AppError("Horário não encontrado", 404);
 
     await this.timeRepository.delete(id);
 
     return reply.status(200).send({
-      message: "Horário deletado com sucesso",
+      message: `Horário ${id} deletado com sucesso`,
     });
   }
 }

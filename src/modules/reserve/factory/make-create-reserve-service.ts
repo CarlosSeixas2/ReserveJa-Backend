@@ -1,6 +1,6 @@
-import { RoomClassRepository } from "../../class_room/repository/class-room-repository";
-import { ReservesTimeRepository } from "../../reserves_time/repository/reserves-time-repository";
-import { TimeClassRoomRepository } from "../../time_class_room/repository/time-class-room-repository";
+import { RoomClassRepository } from "../../room/repository/class-room-repository";
+import { ReservesTimeRepository } from "../../reserved_time/repository/reserves-time-repository";
+import { TimeClassRoomRepository } from "../../room_time/repository/time-class-room-repository";
 import { UserRepository } from "../../user/repository/user-repository";
 import { ReserveRepository } from "../repository/reserve-repository";
 import { CreateReserveService } from "../services/create-reserve";

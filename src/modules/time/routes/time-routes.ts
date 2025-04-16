@@ -9,9 +9,9 @@ export async function timeRoutes(fastify: FastifyInstance) {
 
   fastify.delete("/:id", { preHandler: authMiddleware }, timeController.delete);
 
-  fastify.put("/:id", { preHandler: authMiddleware }, timeController.update);
-
   fastify.get("/", timeController.list);
 
-  fastify.get("/:id", { preHandler: authMiddleware }, timeController.get);
+  fastify.get("/:id", timeController.get);
+
+  fastify.put("/:id", { preHandler: authMiddleware }, timeController.update);
 }

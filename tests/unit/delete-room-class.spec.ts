@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { ZodError } from "zod";
 import { ClassRoomMemory } from "../in-memory/class-room-memory";
-import { DeleteRoomService } from "../../src/modules/class_room/services/delete-rom";
+import { DeleteRoomService } from "../../src/modules/room/services/delete-rom";
 import { AppError } from "../../src/errors/app-error";
 
 let roomclassRepository: ClassRoomMemory;

@@ -19,13 +19,28 @@ export class UpdateTimeService {
     const { id } = this.timeParamsSchema.parse(req.params);
     const { inicialTime, finalTime } = this.timeBodySchema.parse(req.body);
 
-    const time = await this.timeRepository.listById(id);
+    const timeExist = await this.timeRepository.listById(id);
 
-    if (!time) throw new AppError("Horário não encontrado", 404);
+    if (!timeExist) throw new AppError(`Horário ${id} não encontrado`, 404);
+
+    if (inicialTime && finalTime) {
+      const conflict = await this.timeRepository.hasTimeOverlap(
+        inicialTime,
+        finalTime,
+        id
+      );
+
+      if (conflict) {
+        throw new AppError(
+          "Intervalo de horário se sobrepõe a um já existente.",
+          409
+        );
+      }
+    }
 
     await this.timeRepository.update(id, {
-      horarioInicio: inicialTime,
-      horarioFim: finalTime,
+      inicio: inicialTime,
+      fim: finalTime,
     });
 
     return reply.status(201).send({

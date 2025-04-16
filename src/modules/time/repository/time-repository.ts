@@ -3,61 +3,60 @@ import prisma from "../../../database";
 
 export class TimeRepository {
   public async listAll(): Promise<Horario[]> {
-    const times = await prisma.horario.findMany();
-
-    return times;
+    return prisma.horario.findMany();
   }
 
   public async listById(id: string): Promise<Horario | null> {
-    const time = await prisma.horario.findUnique({
-      where: {
-        id,
-      },
+    return prisma.horario.findUnique({
+      where: { id },
     });
-
-    return time;
   }
 
   public async create(data: Prisma.HorarioCreateInput): Promise<Horario> {
-    const time = await prisma.horario.create({
-      data,
-    });
-
-    return time;
+    return prisma.horario.create({ data });
   }
 
   public async update(
     id: string,
     data: Prisma.HorarioUpdateInput
   ): Promise<Horario> {
-    const time = await prisma.horario.update({
-      where: {
-        id,
-      },
+    return prisma.horario.update({
+      where: { id },
       data,
     });
-    return time;
   }
 
   public async delete(id: string): Promise<void> {
     await prisma.horario.delete({
-      where: {
-        id,
-      },
+      where: { id },
     });
   }
 
-  public async findByTime(
-    inicialTime: string,
-    finalTime: string
-  ): Promise<Horario | null> {
-    const time = await prisma.horario.findFirst({
+  public async hasTimeOverlap(
+    horarioInicio: string,
+    horarioFim: string,
+    excludeId?: string
+  ): Promise<boolean> {
+    const overlapping = await prisma.horario.findFirst({
       where: {
-        horarioInicio: inicialTime,
-        horarioFim: finalTime,
+        NOT: {
+          id: excludeId, // Ignora o horário sendo editado
+        },
+        AND: [
+          {
+            inicio: {
+              lt: horarioFim, // início existente < fim novo
+            },
+          },
+          {
+            fim: {
+              gt: horarioInicio, // fim existente > início novo
+            },
+          },
+        ],
       },
     });
 
-    return time;
+    return !!overlapping;
   }
 }

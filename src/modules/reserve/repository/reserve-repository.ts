@@ -3,7 +3,11 @@ import prisma from "../../../database";
 
 export class ReserveRepository {
   public async listAll(): Promise<Reserva[]> {
-    const reserves = await prisma.reserva.findMany();
+    const reserves = await prisma.reserva.findMany({
+      orderBy: {
+        criadoEm: "desc",
+      },
+    });
 
     return reserves;
   }
@@ -23,10 +27,6 @@ export class ReserveRepository {
             email: true,
           },
         },
-      },
-      omit: {
-        salaId: true,
-        usuarioId: true,
       },
     });
 

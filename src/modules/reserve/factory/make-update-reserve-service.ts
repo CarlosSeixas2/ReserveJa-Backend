@@ -1,4 +1,3 @@
-import { RoomClassRepository } from "../../class_room/repository/class-room-repository";
 import { UserRepository } from "../../user/repository/user-repository";
 import { ReserveRepository } from "../repository/reserve-repository";
 import { UpdateReserveService } from "../services/update-reserve";
